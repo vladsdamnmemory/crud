@@ -1,6 +1,6 @@
 <template>
   <div class="create">
-    <h1>New task {{ date }}</h1>
+    <h1>New task</h1>
 
     <form>
       <h3>Title</h3>
@@ -28,7 +28,6 @@ export default {
   },
   data() {
     return {
-      date: new Date().toLocaleString(),
       taskTitle: '',
       taskDescription: ''
 
@@ -45,7 +44,7 @@ export default {
 
       let list = JSON.parse(localStorage.getItem('tasks'));
 
-      let record = {id: undefined, title: this.taskTitle, description: this.taskDescription};
+      let record = {id: undefined, title: this.taskTitle, description: this.taskDescription, date: new Date().getTime()};
 
 
       if (list && list instanceof Array) {

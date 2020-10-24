@@ -26,7 +26,7 @@ button {
   padding: 12px;
   text-decoration: none;
   font-size: 16px;
-  background: #fef5ef;
+  //background: #fef5ef;
   border: none;
   border-radius: 4px;
   min-width: 200px;
@@ -34,6 +34,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e4bb97;
+  color: #ffffff;
+  text-transform: uppercase;
+  background: #ba5179;
 }
 </style>
