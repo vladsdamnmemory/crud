@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="default-button" @click="clicked($event)">{{ title }}</button>
+    <button v-bind:type="type" class="default-button" @click="clicked($event)">{{ title }}</button>
   </div>
 </template>
 
@@ -10,7 +10,8 @@
 export default {
   name: "DButton",
   props: {
-    title: String
+    title: String,
+    type: String
   },
   methods: {
     clicked(ev) {

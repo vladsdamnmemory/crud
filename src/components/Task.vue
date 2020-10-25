@@ -1,41 +1,28 @@
 <template>
   <section>
     <h3>{{ title }}</h3>
+    <p>Creation date: {{ creationDate }}</p>
+    <p>Time: {{ creationTime }}</p>
     <p>ID: {{ id }}</p>
-    <p v-if="!editDesc" class="description" @click="edit()">{{ description }}</p>
+    <p class="description">{{ description }}</p>
 
-    <div v-if="editDesc">
-      <textarea name="" id="" cols="30" rows="10" v-model="desc"></textarea>
-     <div @click="save()">save</div>
-    </div>
   </section>
 </template>
 
 <script>
 export default {
   name: "Task",
-  props: {id: Number, title: String, description: String},
+  props: {id: Number, title: String, description: String, date: Number},
   data() {
-    return {editDesc: false, desc: ''}
-  },
-  methods: {
-    edit() {
-      this.editDesc = true;
-      this.desc = this.description;
-
-    }, save() {
-      let tasks = JSON.parse(localStorage.getItem('tasks'));
-      tasks.find(task => task.id = this.id).description = this.desc;
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      this.editDesc = false;
+    return {
+      editDesc: false,
+      desc: '',
+      creationDate: new Date(this.date).toLocaleDateString(),
+      creationTime: new Date(this.date).getHours() + ':' + new Date(this.date).getMinutes()
 
     }
   },
-  watch: {
-    description() {
-
-    }
-  }
+  methods: {}
 
 }
 </script>
@@ -53,7 +40,7 @@ section {
     padding: 12px;
     margin: 12px 0 0;
     /* box-shadow: 0 0 4px #d0d0d0; */
-    border: 1px #c1c1c1 solid;
+    //border: 1px #c1c1c1 solid;
   }
 }
 

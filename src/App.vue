@@ -13,8 +13,26 @@
         <router-view/>
       </transition>
     </div>
+    <message></message>
   </div>
 </template>
+
+<script>
+import {mapGetters, mapActions} from 'vuex';
+import Message from "@/components/Message";
+
+export default {
+  name: 'app',
+  components: {Message},
+  computed: mapGetters(['allTasks']),
+  methods: mapActions(['fetchTasks']),
+  mounted() {
+    this.fetchTasks();
+  }
+
+}
+</script>
+
 
 <style lang="scss">
 .logo {

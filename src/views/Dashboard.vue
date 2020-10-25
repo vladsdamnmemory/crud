@@ -1,22 +1,29 @@
 <template>
   <div class="home">
-    <h1>Currently available tasks</h1>
+    <h2 class="mt24">Dashboard</h2>
 
     <div class="sort">
       <i>sort by</i>
-      <span @click="byId = true; byDate = false;">Id</span>
-      <span @click="byDate = true; byId = false;">Date</span>
-      <span @click="byDate = false; byDate =false;">Clear</span>
+      <span @click="sortBy('id')">Id</span>
+      <span @click="sortBy('date')">Date of creation</span>
     </div>
 
     <div class="home__sections">
       <div class="info">
-        Have a productive day!
+        <span v-if="!logs.length">No news yet</span>
+
+        <div class="home__log" v-for="(log, index) in logs" v-bind:key="index">
+          {{ log }}
+        </div>
       </div>
 
       <div class="tasks-b">
-        <task class="tasks-b__task" v-for="task of tasks" :key="task.id" v-bind:title="task.title"
-              v-bind:description="task.description" v-bind:id="task.id"></task>
+        <task class="tasks-b__task" v-for="task of tasks"
+              :key="task.id" v-bind:title="task.title"
+              v-bind:description="task.description"
+              v-bind:id="task.id"
+              v-bind:date="task.date"
+              @click.native="goToTask(task.id)"></task>
       </div>
 
     </div>
@@ -40,33 +47,30 @@ export default {
     }
   },
   methods: {
+
+    goToTask(id) {
+      console.log(id);
+      this.$router.push({path: `/task/${id}`}).catch((err) => {
+        console.log(err);
+      });
+
+    },
     sortArray(propName) {
       return function sort(a, b) {
-        if (propName === 'date') return b[propName] - a[propName];
         if (propName === 'id') return a[propName] - b[propName];
+        if (propName === 'date') return b[propName] - a[propName];
       }
+    },
+    sortBy(filter) {
+      this.$store.getters.allTasks.sort(this.sortArray(filter))
     }
   },
   computed: {
     tasks() {
-
-      let tasks = JSON.parse(localStorage.getItem('tasks'));
-
-      if (tasks && tasks instanceof Array) {
-
-        if (this.byDate) {
-          return tasks.sort(this.sortArray('date'));
-        }
-
-        if (this.byId) {
-          return tasks.sort(this.sortArray('id'));
-        }
-
-      }
-
-      return tasks;
-
-
+      return this.$store.getters.allTasks;
+    },
+    logs() {
+      return this.$store.getters.getLogs;
     }
   }
 }
@@ -82,12 +86,30 @@ export default {
     > div {
       width: 50%;
     }
+  }
 
+  &__log {
+    opacity: .8;
+    box-shadow: 0 0 1px 0 #ba5179;
+    padding: 12px;
+    border-radius: 4px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+
+    &:nth-child(even) {
+      opacity: 1;
+    }
   }
 }
 
 .tasks-b {
   &__task {
+    animation: ease .4s;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 }
 

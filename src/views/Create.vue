@@ -1,6 +1,6 @@
 <template>
   <div class="create">
-    <h1>New task</h1>
+    <h2 class="mt24">New task</h2>
 
     <form>
       <h3>Title</h3>
@@ -9,7 +9,7 @@
       <h3>Description</h3>
       <textarea name="" id="" cols="30" rows="10" v-model="taskDescription"></textarea>
 
-      <d-button v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
+      <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
     </form>
   </div>
 </template>
@@ -17,6 +17,8 @@
 
 <script>
 import DButton from "@/components/DButton";
+import {mapMutations} from "vuex";
+
 
 export default {
   name: "Create",
@@ -34,29 +36,23 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['createTask']),
 
-    getMax(arr) {
-      console.log('arr');
-      return Math.max.apply(null, arr.map(item => item.id))
-    },
     submit() {
+
+      let task = {
+        id: undefined,
+        title: this.taskTitle,
+        description: this.taskDescription,
+        date: new Date().getTime()
+      };
+
+
+      this.createTask(task);
       console.log('Submitted');
-
-      let list = JSON.parse(localStorage.getItem('tasks'));
-
-      let record = {id: undefined, title: this.taskTitle, description: this.taskDescription, date: new Date().getTime()};
+      this.$store.dispatch('unshiftLog', `Task ${task.id} has been created ${new Date().toLocaleTimeString()}`);
 
 
-      if (list && list instanceof Array) {
-        record.id = this.getMax(list);
-        record.id++;
-        list.push(record);
-        localStorage.setItem('tasks', JSON.stringify(list));
-
-      } else {
-        record.id = 1;
-        localStorage.setItem('tasks', JSON.stringify([record]));
-      }
 
     }
   }
