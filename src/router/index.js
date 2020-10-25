@@ -3,8 +3,9 @@ import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import TaskData from "@/views/TaskData";
 import SubtaskData from "@/views/SubtaskData";
+import store from "@/store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
     {
@@ -38,10 +39,16 @@ const routes = [
         name: 'Subtask'
 
     }
-]
+];
 
 const router = new VueRouter({
     routes
+});
+
+router.afterEach((to, from) => {
+    console.log(to);
+    console.log(from);
+    console.log(store.dispatch('addBreadcrumb', router.currentRoute));
 })
 
-export default router
+export default router;

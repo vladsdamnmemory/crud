@@ -10,7 +10,8 @@
 
       <h3>Description</h3>
       <label>
-        <textarea name="" id="" cols="30" rows="10" v-model="taskDescription" placeholder="Type in task description"></textarea>
+        <textarea name="" id="" cols="30" rows="10" v-model="taskDescription"
+                  placeholder="Type in task description"></textarea>
       </label>
 
       <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
@@ -68,6 +69,8 @@ export default {
       this.$router.push({path: '/'}).catch();
 
     }
+  }, created() {
+    console.log(this.$route);
   }
 
 
