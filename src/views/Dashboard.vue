@@ -1,8 +1,10 @@
 <template>
   <div class="home">
     <h2 class="mt24">Dashboard</h2>
+    <p class="comment mb24" v-if="!tasks.length">Feels a little empty over here. Wanna add some tasks? Go ahead!</p>
 
-    <div class="sort">
+
+    <div class="sort" v-if="tasks.length">
       <i>sort by</i>
       <span @click="sortBy('id')">Number</span>
       <span @click="sortBy('date')">Date of creation</span>
@@ -10,7 +12,7 @@
 
     <div class="home__sections">
       <div class="info">
-        <span v-if="!logs.length">No feed to show</span>
+        <span v-if="!logs.length && tasks.length">No feed to show</span>
 
         <div class="home__log" v-for="(log, index) in logs" v-bind:key="index">
           {{ log }}
@@ -18,11 +20,13 @@
       </div>
 
       <div class="tasks-b">
+
         <task class="tasks-b__task" v-for="task of tasks"
               :key="task.id" v-bind:title="task.title"
               v-bind:description="task.description"
               v-bind:id="task.id"
               v-bind:date="task.date"
+              v-bind:value="'Task'"
               @click.native="goToTask(task.id)"></task>
       </div>
 

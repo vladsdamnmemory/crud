@@ -91,7 +91,7 @@ export default {
             this.dispatch('updateTaskInLocalStorage');
         },
         removeSubtask(state, options) {
-            console.log('options',options);
+            console.log('options', options);
             let task = state.tasks.find(item => +item.id === +options.taskId);
 
             for (let item of task.subtasks) {
@@ -137,6 +137,10 @@ export default {
 
             task.subtasks.unshift(data.subtask);
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
+
+            this.dispatch('pushMessage', `Subtask #${data.subtask.nestedId} successfully created`);
+            this.dispatch('unshiftLog', `Subtask #${data.subtask.nestedId} successfully created`);
+
         }
     },
     getters: {

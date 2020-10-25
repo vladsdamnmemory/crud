@@ -2,7 +2,7 @@
   <section>
     <p class="task-date">Created: {{ creationDate }} at {{ creationTime }}</p>
 
-    <h3><span>Task #{{ id }}:</span> {{ title }}</h3>
+    <h3><span>{{ value }} #{{ id }}:</span> {{ title }}</h3>
     <p class="description" v-if="description.trim()">{{ description }}</p>
 
   </section>
@@ -23,6 +23,10 @@ export default {
     },
     date: {
       type: [Number]
+    },
+    value:{
+      type: [String]
+
     }
   }
   ,

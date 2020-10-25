@@ -29,15 +29,18 @@ const routes = [
         component: () => import(/* webpackChunkName: "create" */ '../views/Create.vue')
     },
     {
-        path: '/task/:id', component: TaskData
+        path: '/task/:id', component: TaskData,
+        name: 'Task'
+
     },
     {
-        path: '/task/:id/:nestedId', component: SubtaskData
+        path: '/task/:id/:nestedId', component: SubtaskData,
+        name: 'Subtask'
+
     }
 ]
 
 const router = new VueRouter({
-    mode: 'history',
     routes
 })
 

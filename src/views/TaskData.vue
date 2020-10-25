@@ -23,8 +23,8 @@
       </div>
       <h2>Task #{{ task.id }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}" @click="editTitle()"
                                      v-if="!titleEditable">{{ task.title }}</span></h2>
-      <input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="task.title"
-             @blur="saveChanges()">
+      <label><input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="task.title"
+                @blur="saveChanges()"></label>
 
       <p class="description" v-bind:class="{'empty': emptyDescription}" title="Click to edit"
          @click="editDescription()"
@@ -65,6 +65,7 @@
                 v-bind:description="task.description"
                 v-bind:id="task.nestedId"
                 v-bind:date="task.date"
+                v-bind:value="'Subtask'"
                 @click.native="goToTask(task.nestedId)"></task>
         </div>
       </div>
@@ -95,11 +96,15 @@ export default {
     },
 
     assignStatus(status) {
+      if (this.task.status === status) {
+        return false;
+      }
+
       this.task.status = status;
       this.$store.dispatch('updateTaskInLocalStorage');
 
       this.$store.dispatch('pushMessage', 'Task status has been modified successfully');
-      this.$store.dispatch('unshiftLog', `Status in task #${this.task.id} switch to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('unshiftLog', `Status in task #${this.task.id} has been switched to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
     },
 
     removeTask() {
@@ -138,7 +143,7 @@ export default {
 
       this.$store.dispatch('updateTaskInLocalStorage');
       this.$store.dispatch('pushMessage', 'Task has been modified successfully');
-      this.$store.dispatch('unshiftLog', `Task ${this.task.id} has been modified at ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('unshiftLog', `Task #${this.task.id} has been modified at ${new Date().toLocaleTimeString()}`);
 
     }
   },

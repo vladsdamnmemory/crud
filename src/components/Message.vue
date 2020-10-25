@@ -44,9 +44,14 @@ export default {
     width: max-content;
     max-width: 50vw;
     margin: 0 0 12px;
-    color: white;
-    background: #64dc90;
+    color: #ffffff;
+    background: #6ccd48;
+    //border: 1px #21371c solid;
     list-style: none;
+    box-shadow: 0 0 2px #b5b5b5;
+    &::before{
+      content: '\25C8';
+    }
   }
 }
 </style>

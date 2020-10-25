@@ -7,7 +7,7 @@
 
           <form v-if="modalType === 'subtask'">
             <h3>Title</h3>
-            <input type="text" v-model="subtaskTitle" placeholder="Type in subtask title">
+            <label><input type="text" v-model="subtaskTitle" placeholder="Type in subtask title"></label>
 
             <h3>Description</h3>
             <label>
@@ -49,7 +49,7 @@ export default {
         }
 
       });
-
+      this.hide();
 
     },
     hide() {

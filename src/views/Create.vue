@@ -4,7 +4,9 @@
 
     <form>
       <h3>Title</h3>
-      <input type="text" v-model="taskTitle" placeholder="Type in task title">
+      <label>
+        <input type="text" v-model="taskTitle" placeholder="Type in task title">
+      </label>
 
       <h3>Description</h3>
       <label>
@@ -44,8 +46,7 @@ export default {
 
       if (!this.taskTitle.trim()) {
         this.$store.dispatch('pushMessage', 'Please specify the title');
-
-        return false;
+        return;
       }
 
       let task = {
@@ -60,8 +61,8 @@ export default {
 
       this.createTask(task);
       console.log('Submitted');
-      this.$store.dispatch('unshiftLog', `Task ${task.id} has been created ${new Date().toLocaleTimeString()}`);
-      this.$store.dispatch('pushMessage', `Task ${task.id} has been successfully created`);
+      this.$store.dispatch('unshiftLog', `Task #${task.id} has been created ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('pushMessage', `Task #${task.id} has been successfully created`);
 
       this.taskTitle = this.taskDescription = '';
       this.$router.push({path: '/'}).catch();

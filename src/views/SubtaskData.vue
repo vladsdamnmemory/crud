@@ -23,8 +23,9 @@
       <h2>Subtask #{{ subtask.nestedId }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}"
                                                  @click="editTitle()"
                                                  v-if="!titleEditable">{{ subtask.title }}</span></h2>
-      <input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="subtask.title"
-             @blur="saveChanges()">
+      <label><input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text"
+                v-model="subtask.title"
+                @blur="saveChanges()"></label>
 
       <p class="description" v-bind:class="{'empty': emptyDescription}" title="Click to edit"
          @click="editDescription()"
@@ -70,11 +71,15 @@ export default {
   },
   methods: {
     assignStatus(status) {
+      if (this.subtask.status === status) {
+        return false;
+      }
+
       this.subtask.status = status;
       this.$store.dispatch('updateTaskInLocalStorage');
 
       this.$store.dispatch('pushMessage', 'Subtask status has been modified successfully');
-      this.$store.dispatch('unshiftLog', `Status in task #${this.subtask.nestedId} switch to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('unshiftLog', `Status in subtask #${this.subtask.nestedId} has been switched to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
     },
 
     removeSubtask() {
@@ -86,12 +91,6 @@ export default {
       this.$router.push({path: '/'}).catch();
 
 
-    },
-    createSubtask() {
-      this.$store.commit('setType', 'subtask');
-      this.$nextTick(() => {
-        this.$store.dispatch('toggleModal');
-      });
     },
     editTitle() {
       this.titleEditable = true;
@@ -112,8 +111,8 @@ export default {
       this.titleEditable = false;
 
       this.$store.dispatch('updateTaskInLocalStorage');
-      this.$store.dispatch('pushMessage', 'Task has been modified successfully');
-      this.$store.dispatch('unshiftLog', `Task ${this.task.id} has been modified at ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('pushMessage', 'Subtask has been modified successfully');
+      this.$store.dispatch('unshiftLog', `Subtask #${this.subtask.nestedId} has been modified at ${new Date().toLocaleTimeString()}`);
 
     }
   }
