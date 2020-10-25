@@ -61,7 +61,7 @@
         <h3>Subtasks</h3>
         <div class="tasks-b">
           <task class="tasks-b__task" v-for="task of subtasks"
-                :key="task.id" v-bind:title="task.title"
+                :key="task.nestedId" v-bind:title="task.title"
                 v-bind:description="task.description"
                 v-bind:id="task.nestedId"
                 v-bind:date="task.date"
@@ -84,7 +84,7 @@ export default {
     return {
       titleEditable: false,
       descriptionEditable: false,
-      showStatusOptions: false
+      showStatusOptions: false,
     }
   },
   methods: {
@@ -142,9 +142,21 @@ export default {
 
   computed: {
     subtasks() {
-      return this.$store.getters.subtasks;
-    },
 
+      if (this.$store.getters.allTasks.length) {
+
+        let i = this.$store.getters.allTasks.indexOf(this.task);
+
+        return this.$store.getters.allTasks[i].subtasks;
+
+      }
+
+      return [];
+
+
+    }
+
+    ,
     task() {
       if (this.$store.getters.allTasks.length) {
         return this.$store.getters.allTasks.find(task => {
@@ -170,6 +182,10 @@ export default {
   },
 
   mounted() {
+
+    // setTimeout(() => {
+    //   this.subtasks = this.$store.getters.subtasks;
+    // }, 1000)
   }
 }
 
