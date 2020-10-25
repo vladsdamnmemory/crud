@@ -29,6 +29,13 @@ export default {
         updateTasks(state, tasks) {
             state.tasks = tasks;
         },
+        removeTask(state, id) {
+            state.tasks = state.tasks.filter(task => {
+                return +task.id !== +id;
+            });
+
+            this.dispatch('updateTaskInLocalStorage');
+        },
         createTask(state, newTask) {
             console.log('This', this);
             newTask.id = state.tasks.length ? this.getters.newId : 1;

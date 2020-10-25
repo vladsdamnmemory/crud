@@ -40,7 +40,7 @@ $sand: #e4bb97;
   }
 
   input, textarea {
-    border: 1px $darkLiver solid;
+    border: 1px #d8d4d7 solid;
 
     &:focus {
       outline: none;
@@ -50,7 +50,6 @@ $sand: #e4bb97;
   }
 
   input {
-    border: 1px $darkLiver solid;
     padding: 12px;
     width: 100%;
     margin: 0 0 12px;
@@ -107,8 +106,9 @@ $sand: #e4bb97;
 
 
   .content {
-    max-width: 1340px;
+    max-width: 1388px;
     margin: 12px auto 0;
+    padding: 0 24px;
   }
 
   hr {

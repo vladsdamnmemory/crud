@@ -4,7 +4,7 @@
     <p>Creation date: {{ creationDate }}</p>
     <p>Time: {{ creationTime }}</p>
     <p>ID: {{ id }}</p>
-    <p class="description">{{ description }}</p>
+    <p class="description" v-if="description.trim()">{{ description }}</p>
 
   </section>
 </template>

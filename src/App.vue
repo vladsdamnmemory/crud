@@ -5,7 +5,7 @@
         <div class="logo"></div>
         <router-link to="/">Dashboard</router-link>
         <router-link to="/create">Create</router-link>
-        <router-link to="/about">About</router-link>
+        <router-link to="/settings">Settings</router-link>
       </div>
     </nav>
     <div class="content">
@@ -14,16 +14,18 @@
       </transition>
     </div>
     <message></message>
+    <modal v-if="$store.getters.modalDisplayed"></modal>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import Message from "@/components/Message";
+import Modal from "@/components/Modal";
 
 export default {
   name: 'app',
-  components: {Message},
+  components: {Modal, Message},
   computed: mapGetters(['allTasks']),
   methods: mapActions(['fetchTasks']),
   mounted() {

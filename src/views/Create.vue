@@ -4,10 +4,12 @@
 
     <form>
       <h3>Title</h3>
-      <input type="text" v-model="taskTitle">
+      <input type="text" v-model="taskTitle" placeholder="Type in task title">
 
       <h3>Description</h3>
-      <textarea name="" id="" cols="30" rows="10" v-model="taskDescription"></textarea>
+      <label>
+        <textarea name="" id="" cols="30" rows="10" v-model="taskDescription" placeholder="Type in task description"></textarea>
+      </label>
 
       <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
     </form>
@@ -40,19 +42,29 @@ export default {
 
     submit() {
 
+      if (!this.taskTitle.trim()) {
+        this.$store.dispatch('pushMessage', 'Please specify the title');
+
+        return false;
+      }
+
       let task = {
         id: undefined,
         title: this.taskTitle,
         description: this.taskDescription,
-        date: new Date().getTime()
+        date: new Date().getTime(),
+        status: 'Idle',
+        subtasks: []
       };
 
 
       this.createTask(task);
       console.log('Submitted');
       this.$store.dispatch('unshiftLog', `Task ${task.id} has been created ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('pushMessage', `Task ${task.id} has been successfully created`);
 
-
+      this.taskTitle = this.taskDescription = '';
+      this.$router.push({path: '/'}).catch();
 
     }
   }

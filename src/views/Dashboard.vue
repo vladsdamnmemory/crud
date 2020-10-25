@@ -10,7 +10,7 @@
 
     <div class="home__sections">
       <div class="info">
-        <span v-if="!logs.length">No news yet</span>
+        <span v-if="!logs.length">No feed to show</span>
 
         <div class="home__log" v-for="(log, index) in logs" v-bind:key="index">
           {{ log }}

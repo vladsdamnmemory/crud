@@ -2,7 +2,26 @@
   <div class="taskData">
 
     <form class="mt24">
-      <h2>Task #{{ task.id }}: <span v-bind:class="{'empty': emptyTitle}" @click="editTitle()"
+      <div class="status"
+           v-bind:class="{
+          progress: task.status === 'In progress',
+          fulfilled: task.status === 'Fulfilled',
+          closed: task.status === 'Closed'
+        }"
+           title="Change status" @click="showStatusOptions = !showStatusOptions">
+        <div>{{ task.status }}</div>
+        <transition name="fade">
+          <div class="status-change" v-if="showStatusOptions">
+            <ul>
+              <li @click="assignStatus('Idle')">Idle</li>
+              <li @click="assignStatus('In progress')">In progress</li>
+              <li @click="assignStatus('Fulfilled')">Fulfilled</li>
+              <li @click="assignStatus('Closed')">Closed</li>
+            </ul>
+          </div>
+        </transition>
+      </div>
+      <h2>Task #{{ task.id }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}" @click="editTitle()"
                                      v-if="!titleEditable">{{ task.title }}</span></h2>
       <input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="task.title"
              @blur="saveChanges()">
@@ -18,6 +37,16 @@
         </label>
       </div>
 
+      <div class="mt24 mb12 btn-container">
+        <div>
+          <d-button class="" v-bind:title="'+ Add subtask'" @click.native="createSubtask()"></d-button>
+
+        </div>
+        <div>
+          <d-button v-bind:title="'Remove'" @click.native="removeTask()"></d-button>
+        </div>
+      </div>
+
       <hr>
 
       <p class="help">
@@ -30,17 +59,40 @@
 </template>
 
 <script>
+import DButton from "@/components/DButton";
+
 export default {
   name: "TaskData",
-
+  components: {DButton},
   data() {
     return {
       titleEditable: false,
-      descriptionEditable: false
+      descriptionEditable: false,
+      showStatusOptions: false
     }
   },
   methods: {
+    assignStatus(status) {
+      this.task.status = status;
+      this.$store.dispatch('updateTaskInLocalStorage');
 
+      this.$store.dispatch('pushMessage', 'Task status has been modified successfully');
+      this.$store.dispatch('unshiftLog', `Status in task #${this.task.id} switch to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
+    },
+
+    removeTask() {
+      this.$store.dispatch('pushMessage', `Task "${this.task.title.trim()}" has been removed`);
+      this.$store.dispatch('unshiftLog', `Task "${this.task.title.trim()}" has been removed`);
+
+
+      this.$store.commit('removeTask', this.task.id);
+      this.$router.push({path: '/'}).catch();
+
+
+    },
+    createSubtask() {
+      this.$store.dispatch('toggleModal');
+    },
     editTitle() {
       this.titleEditable = true;
       this.$nextTick(() => {
@@ -76,10 +128,18 @@ export default {
       return {};
     },
     emptyDescription() {
-      return !this.task.description.trim();
+      if (typeof this.task.description === 'string') {
+        return !this.task.description.trim();
+      }
+      return true;
     },
     emptyTitle() {
-      return !this.task.title.trim();
+      if (typeof this.task.title === 'string') {
+        return !this.task.title.trim();
+      }
+
+      return true;
+
     }
   },
 
@@ -92,13 +152,90 @@ export default {
 <style scoped lang="scss">
 form {
   display: block;
+  position: relative;
   width: 80%;
+
+  h2 {
+    span:hover {
+      opacity: .7;
+    }
+  }
+
+  p.description:hover {
+    opacity: .7;
+
+  }
 
   input {
   }
 
   .taskData__description {
   }
+
+  .status {
+    position: absolute;
+    display: flex;
+    padding: 4px 24px;
+    background: #b8b8b8;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 1;
+    right: 0;
+    top: 0;
+    font-size: 14px;
+
+    &.progress {
+      background: #e4bb97;
+
+    }
+
+    &.fulfilled {
+      background: #64dc90;
+
+    }
+
+    &.closed {
+      background: #3ab567;
+    }
+
+    &:hover {
+      //opacity: .9;
+
+    }
+
+  }
+
+  .status-change {
+    position: absolute;
+    top: 32px;
+    right: 0;
+    width: 120px;
+    min-height: 100px;
+    z-index: 120;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 0 1px black;
+
+    li {
+      display: block;
+      padding: 12px;
+      color: #584b53;
+
+      &:hover {
+        background: #c26387;
+        color: white;
+      }
+    }
+  }
+
+  //&:hover {
+  //  .delete {
+  //    display: flex;
+  //
+  //  }
+  //}
 }
 
 .help {
@@ -107,5 +244,15 @@ form {
 }
 
 hr {
+}
+
+.btn-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  > div {
+    margin-right: 12px;
+  }
 }
 </style>

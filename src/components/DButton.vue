@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button v-bind:type="type" class="default-button" @click="clicked($event)">{{ title }}</button>
+    <button v-bind:class="{'remove': title.toLowerCase() === 'remove'}" v-bind:type="type" class="default-button"
+            @click="clicked($event)">{{ title }}
+    </button>
   </div>
 </template>
 
@@ -24,19 +26,34 @@ export default {
 <style scoped lang="scss">
 
 button {
+  opacity: .9;
+  cursor: pointer;
+  outline: none;
   padding: 12px;
   text-decoration: none;
   font-size: 16px;
   //background: #fef5ef;
   border: none;
   border-radius: 4px;
-  min-width: 200px;
+  min-width: 144px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  text-transform: uppercase;
+  //text-transform: uppercase;
   background: #ba5179;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    background: #d26b92;
+  }
+
+  &.remove {
+    background: #d4d4d4;
+  }
 }
 </style>
