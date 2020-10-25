@@ -25,6 +25,28 @@ export default {
 
 <style scoped lang="scss">
 
+#app.dark {
+  button {
+    color: #c3c3c3;
+    background: #401b1b;
+
+    &:active {
+      background: #472525;
+
+    }
+
+    &.remove {
+      background: #999494;
+      color: #3c1c1e;
+
+      &:active {
+        background: #ac9f9f;
+
+      }
+    }
+  }
+}
+
 button {
   opacity: .9;
   cursor: pointer;
@@ -54,6 +76,10 @@ button {
 
   &.remove {
     background: #d4d4d4;
+
+    &:active {
+      background: #c5c5c5;
+    }
   }
 }
 </style>

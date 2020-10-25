@@ -45,6 +45,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+
 .task-date {
   font-size: 12px;
   //text-align: right;

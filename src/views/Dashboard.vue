@@ -105,6 +105,21 @@ export default {
   }
 }
 
+#app {
+  &.dark {
+    .tasks-b {
+      &__task {
+        background: #546a7a;
+
+        p.description {
+          background: #9ea3b0;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
 .tasks-b {
   &__task {
     animation: ease .4s;
@@ -115,6 +130,8 @@ export default {
     }
   }
 }
+
+
 
 .sort {
   margin: 24px 0 12px;
@@ -139,6 +156,18 @@ export default {
     &:hover {
       opacity: 1;
     }
+
+  }
+}
+
+#app.dark {
+  .sort {
+
+    span {
+      color: #1b1b1b;
+      background: #929292;
+    }
+
 
   }
 }

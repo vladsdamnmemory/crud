@@ -166,6 +166,8 @@ export default {
 
 <style scoped lang="scss">
 
+
+
 form {
   display: block;
   position: relative;
@@ -230,6 +232,8 @@ form {
 
   }
 
+
+
   .status-change {
     position: absolute;
     top: 32px;
@@ -260,6 +264,7 @@ form {
   //  }
   //}
 }
+
 
 .help {
   user-select: none;

@@ -45,7 +45,7 @@ export default {
     max-width: 50vw;
     margin: 0 0 12px;
     color: #ffffff;
-    background: #86cd51;
+    background: #6cb073;
     //border: 1px #21371c solid;
     list-style: none;
     box-shadow: 0 0 2px #b5b5b5;

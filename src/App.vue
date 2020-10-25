@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="[theme]">
     <nav id="nav">
       <div>
         <div class="logo"></div>
@@ -27,25 +27,30 @@ import Modal from "@/components/Modal";
 
 export default {
   name: 'app',
-  components: {  Modal, Message},
-  computed: mapGetters(['allTasks']),
+  components: {Modal, Message},
+  computed: {
+    ...mapGetters(['allTasks']),
+    theme() {
+      return this.$store.getters.theme;
+    }
+  },
   methods: {
     ...mapActions(['fetchTasks'])
   },
   data() {
-    return {
-
-    }
+    return {}
   },
+
   mounted() {
     this.fetchTasks();
+    this.$store.dispatch('changeTheme', localStorage.getItem('theme'));
   }
 
 }
 </script>
 
 
-<style lang="scss">
+<style scoped lang="scss">
 .logo {
   background: url("./assets/img/logo.png") #20ab85 no-repeat center;
   width: 86px;
@@ -53,6 +58,12 @@ export default {
   background-size: 64px;
   padding-right: 120px;
   filter: invert(1);
+}
+
+#app.dark {
+  .logo {
+  background-color:  #6d6d6d ;;
+  }
 }
 
 </style>
