@@ -1,15 +1,14 @@
 <template>
-  <div class="taskData">
-
+  <div class="subtask">
     <form class="mt24">
       <div class="status"
            v-bind:class="{
-          progress: task.status === 'In progress',
-          fulfilled: task.status === 'Fulfilled',
-          closed: task.status === 'Closed'
+          progress: subtask.status === 'In progress',
+          fulfilled: subtask.status === 'Fulfilled',
+          closed: subtask.status === 'Closed'
         }"
            title="Change status" @click="showStatusOptions = !showStatusOptions">
-        <div>{{ task.status }}</div>
+        <div>{{ subtask.status }}</div>
         <transition name="fade">
           <div class="status-change" v-if="showStatusOptions">
             <ul>
@@ -21,31 +20,28 @@
           </div>
         </transition>
       </div>
-      <h2>Task #{{ task.id }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}" @click="editTitle()"
-                                     v-if="!titleEditable">{{ task.title }}</span></h2>
-      <input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="task.title"
+      <h2>Subtask #{{ subtask.nestedId }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}"
+                                                 @click="editTitle()"
+                                                 v-if="!titleEditable">{{ subtask.title }}</span></h2>
+      <input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="subtask.title"
              @blur="saveChanges()">
 
       <p class="description" v-bind:class="{'empty': emptyDescription}" title="Click to edit"
          @click="editDescription()"
-         v-if="!descriptionEditable">{{ task.description }}</p>
+         v-if="!descriptionEditable">{{ subtask.description }}</p>
       <div v-else>
         <label>
           <textarea placeholder="Type in description of task" ref="descRef" @blur="saveChanges()" name="" id=""
                     cols="30" rows="10"
-                    v-model="task.description"></textarea>
+                    v-model="subtask.description"></textarea>
         </label>
       </div>
 
 
       <div class="mt24 mb12 btn-container">
-        <div>
-          <d-button v-bind:type="'button'" class="" v-bind:title="'+ Add subtask'"
-                    @click.native="createSubtask()"></d-button>
 
-        </div>
         <div>
-          <d-button v-bind:type="'button'" v-bind:title="'Remove'" @click.native="removeTask()"></d-button>
+          <d-button v-bind:type="'button'" v-bind:title="'Remove'" @click.native="removeSubtask()"></d-button>
         </div>
       </div>
 
@@ -56,30 +52,15 @@
       </p>
     </form>
 
-    <div class="subtasks-wrapper" v-if="subtasks && subtasks.length">
-      <div class="sub-tasks">
-        <h3>Subtasks</h3>
-        <div class="tasks-b">
-          <task class="tasks-b__task" v-for="task of subtasks"
-                :key="task.nestedId" v-bind:title="task.title"
-                v-bind:description="task.description"
-                v-bind:id="task.nestedId"
-                v-bind:date="task.date"
-                @click.native="goToTask(task.nestedId)"></task>
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
 import DButton from "@/components/DButton";
-import Task from "@/components/Task";
 
 export default {
-  name: "TaskData",
-  components: {Task, DButton},
+  name: "SubtaskData",
+  components: {DButton},
   data() {
     return {
       titleEditable: false,
@@ -88,26 +69,20 @@ export default {
     }
   },
   methods: {
-    goToTask(nestedId) {
-      this.$router.push({path: `/task/${this.task.id}/${nestedId}`}).catch((err) => {
-        console.log(err);
-      });
-    },
-
     assignStatus(status) {
-      this.task.status = status;
+      this.subtask.status = status;
       this.$store.dispatch('updateTaskInLocalStorage');
 
-      this.$store.dispatch('pushMessage', 'Task status has been modified successfully');
-      this.$store.dispatch('unshiftLog', `Status in task #${this.task.id} switch to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
+      this.$store.dispatch('pushMessage', 'Subtask status has been modified successfully');
+      this.$store.dispatch('unshiftLog', `Status in task #${this.subtask.nestedId} switch to "${status.toUpperCase()}" at ${new Date().toLocaleTimeString()}`);
     },
 
-    removeTask() {
-      this.$store.dispatch('pushMessage', `Task "${this.task.title.trim()}" has been removed`);
-      this.$store.dispatch('unshiftLog', `Task "${this.task.title.trim()}" has been removed`);
+    removeSubtask() {
+      this.$store.dispatch('pushMessage', `Subtask "${this.subtask.title.trim()}" has been removed`);
+      this.$store.dispatch('unshiftLog', `Subtask "${this.subtask.title.trim()}" has been removed`);
 
 
-      this.$store.commit('removeTask', this.task.id);
+      this.$store.commit('removeSubtask', {subtaskId: +this.subtask.id, taskId: +this.$route.params.id});
       this.$router.push({path: '/'}).catch();
 
 
@@ -141,62 +116,56 @@ export default {
       this.$store.dispatch('unshiftLog', `Task ${this.task.id} has been modified at ${new Date().toLocaleTimeString()}`);
 
     }
-  },
-
+  }
+  ,
   computed: {
-    subtasks() {
+    subtask() {
+      console.log(this.$route);
       if (this.$store.getters.allTasks.length) {
-        let i = this.$store.getters.allTasks.indexOf(this.task);
-        return this.$store.getters.allTasks[i].subtasks;
-      }
-
-      return [];
-
-    },
-    task() {
-      if (this.$store.getters.allTasks.length) {
-        return this.$store.getters.allTasks.find(task => {
-          return +task.id === +this.$route.params.id;
+        let index;
+        let task = this.$store.getters.allTasks.find((task, i) => {
+          index = i;
+          return task.id === +this.$route.params.id;
         });
+        console.log('mytask', task);
+
+        let subtask = {};
+
+        for (let item of this.$store.getters.allTasks[index].subtasks) {
+          console.log(Number(item.nestedId));
+          console.log(Number(this.$route.params.nestedId));
+          if (Number(item.nestedId) === Number(this.$route.params.nestedId)) {
+            subtask = item;
+            return subtask;
+          }
+        }
+
+
       }
       return {};
-    },
+    }
+    ,
     emptyDescription() {
-      if (typeof this.task.description === 'string') {
-        return !this.task.description.trim();
+      if (typeof this.subtask.description === 'string') {
+        return !this.subtask.description.trim();
       }
       return true;
-    },
+    }
+    ,
     emptyTitle() {
-      if (typeof this.task.title === 'string') {
-        return !this.task.title.trim();
+      if (typeof this.subtask.title === 'string') {
+        return !this.subtask.title.trim();
       }
 
       return true;
 
     }
-  },
-
-  mounted() {
-
   }
-}
 
+}
 </script>
 
 <style scoped lang="scss">
-.taskData {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-
-  .subtasks-wrapper {
-    width: 20%;
-    margin-left: 24px;
-    margin-top: 24px;
-    min-width: 320px;
-  }
-}
 
 form {
   display: block;

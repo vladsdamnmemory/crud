@@ -46,6 +46,7 @@ export default {
     margin: 0 0 12px;
     color: white;
     background: #64dc90;
+    list-style: none;
   }
 }
 </style>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import TaskData from "@/views/TaskData";
+import SubtaskData from "@/views/SubtaskData";
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,9 @@ const routes = [
     },
     {
         path: '/task/:id', component: TaskData
+    },
+    {
+        path: '/task/:id/:nestedId', component: SubtaskData
     }
 ]
 
