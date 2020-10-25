@@ -49,7 +49,6 @@ export default {
   methods: {
 
     goToTask(id) {
-      console.log(id);
       this.$router.push({path: `/task/${id}`}).catch((err) => {
         console.log(err);
       });

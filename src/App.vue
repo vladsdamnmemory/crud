@@ -26,7 +26,7 @@ import Modal from "@/components/Modal";
 export default {
   name: 'app',
   components: {Modal, Message},
-  computed: mapGetters(['allTasks', 'subtasks']),
+  computed: mapGetters(['allTasks']),
   methods: mapActions(['fetchTasks']),
   mounted() {
     this.fetchTasks();

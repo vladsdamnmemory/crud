@@ -1,4 +1,4 @@
-import router from "@/router";
+
 
 export default {
     actions: {
@@ -78,23 +78,6 @@ export default {
         newId(state) {
             let maxId = Math.max.apply(null, state.tasks.map(item => item.id));
             return ++maxId;
-        },
-        subtasks(state, ctx) {
-            console.log('subtasks getter');
-            let index = 0;
-
-            let task = state.tasks.find((task, i) => {
-                console.log(task.id, +router.currentRoute.params.id);
-                index = i;
-                return +task.id === +router.currentRoute.params.id;
-            });
-
-            if (task && task.subtasks) {
-                console.log(task.subtasks);
-                console.log((ctx));
-                return ctx.allTasks[index].subtasks;
-            }
-            return [];
 
         }
     }
