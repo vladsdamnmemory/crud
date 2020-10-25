@@ -10,7 +10,6 @@
     </nav>
     <div class="content">
 
-      <breadcrumb :crumbs="crumbs" @selected="selected"></breadcrumb>
 
       <transition name="fade" mode="out-in">
         <router-view/>
@@ -25,21 +24,17 @@
 import {mapGetters, mapActions} from 'vuex';
 import Message from "@/components/Message";
 import Modal from "@/components/Modal";
-import Breadcrumb from "@/components/breadcrumb";
 
 export default {
   name: 'app',
-  components: {Breadcrumb, Modal, Message},
+  components: {  Modal, Message},
   computed: mapGetters(['allTasks']),
   methods: {
-    ...mapActions(['fetchTasks']),
-    selected(crumb) {
-      console.log(crumb);
-    }
+    ...mapActions(['fetchTasks'])
   },
   data() {
     return {
-      crumbs: ['Dashboard', 'Task', 'Subtask']
+
     }
   },
   mounted() {
