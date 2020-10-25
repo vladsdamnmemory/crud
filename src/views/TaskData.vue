@@ -37,13 +37,15 @@
         </label>
       </div>
 
+
       <div class="mt24 mb12 btn-container">
         <div>
-          <d-button class="" v-bind:title="'+ Add subtask'" @click.native="createSubtask()"></d-button>
+          <d-button v-bind:type="'button'" class="" v-bind:title="'+ Add subtask'"
+                    @click.native="createSubtask()"></d-button>
 
         </div>
         <div>
-          <d-button v-bind:title="'Remove'" @click.native="removeTask()"></d-button>
+          <d-button v-bind:type="'button'" v-bind:title="'Remove'" @click.native="removeTask()"></d-button>
         </div>
       </div>
 
@@ -54,16 +56,30 @@
       </p>
     </form>
 
+    <div class="subtasks-wrapper">
+      <div class="sub-tasks">
+        <h3>Subtasks</h3>
+        <div class="tasks-b">
+          <task class="tasks-b__task" v-for="task of subtasks"
+                :key="task.id" v-bind:title="task.title"
+                v-bind:description="task.description"
+                v-bind:id="task.nestedId"
+                v-bind:date="task.date"
+                @click.native="goToTask(task.id)"></task>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
 
 <script>
 import DButton from "@/components/DButton";
+import Task from "@/components/Task";
 
 export default {
   name: "TaskData",
-  components: {DButton},
+  components: {Task, DButton},
   data() {
     return {
       titleEditable: false,
@@ -72,6 +88,9 @@ export default {
     }
   },
   methods: {
+    goToTask() {
+    },
+
     assignStatus(status) {
       this.task.status = status;
       this.$store.dispatch('updateTaskInLocalStorage');
@@ -91,7 +110,10 @@ export default {
 
     },
     createSubtask() {
-      this.$store.dispatch('toggleModal');
+      this.$store.commit('setType', 'subtask');
+      this.$nextTick(() => {
+        this.$store.dispatch('toggleModal');
+      });
     },
     editTitle() {
       this.titleEditable = true;
@@ -119,6 +141,10 @@ export default {
   },
 
   computed: {
+    subtasks() {
+      return this.$store.getters.subtasks;
+    },
+
     task() {
       if (this.$store.getters.allTasks.length) {
         return this.$store.getters.allTasks.find(task => {
@@ -150,10 +176,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.taskData {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  .subtasks-wrapper {
+    width: 20%;
+    margin-left: 24px;
+    margin-top: 24px;
+    min-width: 320px;
+  }
+}
+
 form {
   display: block;
   position: relative;
   width: 80%;
+
+  .sub-tasks {
+    margin: 24px 0 0;
+    padding-left: 32px;
+
+    h3 {
+      text-align: right;
+    }
+  }
 
   h2 {
     span:hover {
@@ -169,8 +217,6 @@ form {
   input {
   }
 
-  .taskData__description {
-  }
 
   .status {
     position: absolute;
@@ -254,5 +300,7 @@ hr {
   > div {
     margin-right: 12px;
   }
+
+
 }
 </style>

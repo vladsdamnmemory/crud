@@ -5,18 +5,19 @@
         <div class="popup">
           <h2>Create subtask</h2>
 
-          <form>
+          <form v-if="modalType === 'subtask'">
             <h3>Title</h3>
-            <input type="text" v-model="taskTitle">
+            <input type="text" v-model="subtaskTitle" placeholder="Type in subtask title">
 
             <h3>Description</h3>
             <label>
-              <textarea name="" id="" cols="30" rows="10" v-model="taskDescription"></textarea>
-
+              <textarea name="" id="" cols="30" rows="10" v-model="subtaskDescription"
+                        placeholder="Type in subtask description"></textarea>
             </label>
             <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
 
           </form>
+
         </div>
       </div>
     </div>
@@ -24,13 +25,44 @@
 </template>
 
 <script>
+import DButton from "@/components/DButton";
+
 export default {
   name: "Modal",
+  components: {DButton},
+  data() {
+    return {
+      subtaskTitle: '',
+      subtaskDescription: ''
+    }
+  },
   methods: {
+    submit() {
+      this.$store.dispatch('addSubTask', {
+        taskId: this.$route.params.id,
+        subtask: {
+          id: undefined,
+          status: 'Idle',
+          date: new Date().getTime(),
+          title: this.subtaskTitle,
+          description: this.subtaskDescription
+        }
+
+      });
+
+
+    },
     hide() {
-      this.$store.dispatch('toggleModal')
+      this.$store.dispatch('toggleModal');
+    }
+  },
+  computed: {
+    modalType() {
+      return this.$store.getters.modalType;
     }
   }
+
+
 }
 </script>
 

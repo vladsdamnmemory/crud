@@ -4,7 +4,7 @@
 
     <div class="sort">
       <i>sort by</i>
-      <span @click="sortBy('id')">Id</span>
+      <span @click="sortBy('id')">Number</span>
       <span @click="sortBy('date')">Date of creation</span>
     </div>
 

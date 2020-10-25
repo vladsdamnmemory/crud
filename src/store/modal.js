@@ -5,17 +5,24 @@ export default {
         }
     },
     state: {
-        info: [],
+        info: {},
         modalDisplayed: false
     },
     mutations: {
         toggleModal(state) {
             state.modalDisplayed = !state.modalDisplayed;
+        },
+        setType(state, value) {
+            state.info.type = value;
         }
     },
     getters: {
         modalDisplayed(state) {
             return state.modalDisplayed;
+        },
+        modalType(state) {
+            return state.info.type;
+
         }
     }
 }

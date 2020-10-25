@@ -1,3 +1,5 @@
+import router from "@/router";
+
 export default {
     actions: {
         fetchTasks(ctx) {
@@ -19,6 +21,12 @@ export default {
         },
         updateTaskInLocalStorage(ctx) {
             localStorage.setItem('tasks', JSON.stringify(ctx.state.tasks));
+        },
+
+        addSubTask(ctx, data) {
+            console.log(ctx);
+            ctx.commit('createSubTask', data);
+
         }
 
     },
@@ -42,6 +50,24 @@ export default {
 
             state.tasks.unshift(newTask);
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        },
+        createSubTask(state, data) {
+
+            let task = state.tasks.find(task => {
+                return +task.id === +data.taskId;
+            });
+            console.log('cerv', task);
+            if (task.subtasks.length) {
+                data.subtask.id = Math.max.apply(null, task.subtasks.map(item => item.id));
+                ++data.subtask.id;
+            } else {
+                data.subtask.id = 1
+            }
+
+            data.subtask.nestedId = task.id + '.' + data.subtask.id;
+
+            task.subtasks.unshift(data.subtask);
+            localStorage.setItem('tasks', JSON.stringify(state.tasks));
         }
     },
     getters: {
@@ -52,5 +78,13 @@ export default {
             let maxId = Math.max.apply(null, state.tasks.map(item => item.id));
             return ++maxId;
         },
+        subtasks(state) {
+            let task = state.tasks.find(task => {
+                console.log(task.id, +router.currentRoute.params.id);
+                return task.id = +router.currentRoute.params.id;
+            });
+
+            return task.subtasks;
+        }
     }
 }
