@@ -24,8 +24,8 @@
                                                  @click="editTitle()"
                                                  v-if="!titleEditable">{{ subtask.title }}</span></h2>
       <label><input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text"
-                v-model="subtask.title"
-                @blur="saveChanges()"></label>
+                    v-model="subtask.title"
+                    @blur="saveChanges()"></label>
 
       <p class="description" v-bind:class="{'empty': emptyDescription}" title="Click to edit"
          @click="editDescription()"
@@ -88,7 +88,7 @@ export default {
 
 
       this.$store.commit('removeSubtask', {subtaskId: +this.subtask.id, taskId: +this.$route.params.id});
-      this.$router.push({path: '/'}).catch();
+      this.$router.push({path: '/task/' + this.$route.params.id}).catch();
 
 
     },
