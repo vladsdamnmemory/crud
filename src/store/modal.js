@@ -1,7 +1,7 @@
 export default {
     actions: {
-        toggleModal(ctx) {
-            ctx.commit('toggleModal');
+        toggleModal(ctx, data) {
+            ctx.commit('toggleModal', data);
         }
     },
     state: {
@@ -9,20 +9,20 @@ export default {
         modalDisplayed: false
     },
     mutations: {
-        toggleModal(state) {
+        toggleModal(state, data) {
             state.modalDisplayed = !state.modalDisplayed;
-        },
-        setType(state, value) {
-            state.info.type = value;
+            if (!data) return;
+            state.info.header = data.header ? data.header : '';
+            state.info.type = data.type ? data.type : '';
         }
     },
     getters: {
         modalDisplayed(state) {
             return state.modalDisplayed;
         },
-        modalType(state) {
-            return state.info.type;
 
+        data(state) {
+            return state.info;
         }
     }
 }

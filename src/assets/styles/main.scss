@@ -160,7 +160,7 @@ $sand: #e4bb97;
       max-width: 1340px;
       margin: auto;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
     }
 
@@ -175,8 +175,16 @@ $sand: #e4bb97;
       background: #fef5ef;
       color: #e4bb97;;
     }
+
+
   }
 
+  .nav {
+    &__options, &__links {
+      display: flex;
+      align-content: center;
+    }
+  }
 
   .content {
     max-width: 1388px;

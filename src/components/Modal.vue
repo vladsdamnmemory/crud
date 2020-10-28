@@ -3,9 +3,10 @@
     <div class="modal">
       <div class="overlay" @click.self="hide()">
         <div class="popup">
-          <h2>Create subtask</h2>
 
-          <form v-if="modalType === 'subtask'">
+          <h2>{{ data.header }}</h2>
+
+          <form v-if="data.type === 'subtask'">
             <h3>Title</h3>
             <label><input type="text" v-model="subtaskTitle" placeholder="Type in subtask title"></label>
 
@@ -15,9 +16,16 @@
                         placeholder="Type in subtask description"></textarea>
             </label>
             <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submit($event)"></d-button>
-
           </form>
 
+          <form v-if="data.type === 'auth'">
+            Auth
+
+            <label><input type="text" v-model="title" placeholder="Type in your username"></label>
+
+            <d-button v-bind:type="'submit'" v-bind:title="'Submit'" v-on:click.native="submitAuth($event)"></d-button>
+
+          </form>
         </div>
       </div>
     </div>
@@ -33,7 +41,8 @@ export default {
   data() {
     return {
       subtaskTitle: '',
-      subtaskDescription: ''
+      subtaskDescription: '',
+      title: ''
     }
   },
   methods: {
@@ -52,13 +61,20 @@ export default {
       this.hide();
 
     },
+
+    submitAuth() {
+      this.$store.dispatch('requestAuth', this.title);
+      this.hide();
+    },
     hide() {
       this.$store.dispatch('toggleModal');
     }
   },
   computed: {
-    modalType() {
-      return this.$store.getters.modalType;
+
+    data() {
+      return this.$store.getters.data;
+
     }
   }
 

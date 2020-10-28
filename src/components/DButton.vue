@@ -1,7 +1,10 @@
 <template>
   <div>
-    <button v-bind:class="{'remove': title.toLowerCase() === 'remove'}" v-bind:type="type" class="default-button"
-            @click="clicked($event)">{{ title }}
+    <button v-bind:class="{'remove': title.toLowerCase() === 'remove', 'icon': iconProvided}" v-bind:type="type"
+            class="default-button"
+            @click="clicked($event)">
+      <span>{{ title }}</span>
+      <span><slot></slot></span>
     </button>
   </div>
 </template>
@@ -12,8 +15,12 @@
 export default {
   name: "DButton",
   props: {
-    title: String,
-    type: String
+    title: {
+      default: '',
+      type: String
+    },
+    type: String,
+    iconProvided: Boolean
   },
   methods: {
     clicked(ev) {
@@ -65,6 +72,12 @@ button {
   color: #ffffff;
   //text-transform: uppercase;
   background: #ba5179;
+
+  &.icon {
+    span:first-child {
+      margin-right: 6px;
+    }
+  }
 
   &:hover {
     opacity: 1;

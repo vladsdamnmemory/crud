@@ -1,11 +1,18 @@
 <template>
   <div id="app" :class="[theme]">
-    <nav id="nav">
+    <nav id="nav" class="nav">
       <div>
-        <div class="logo"></div>
-        <router-link to="/">Dashboard</router-link>
-        <router-link to="/create">Create</router-link>
-        <router-link to="/settings">Settings</router-link>
+        <div class="nav__links">
+          <div class="logo"></div>
+          <router-link to="/">Dashboard</router-link>
+          <router-link to="/create">Create</router-link>
+          <router-link to="/settings">Settings</router-link>
+        </div>
+        <div class="nav__options">
+          <d-button v-if="!userData" :title="'Sign in'" :icon-provided="true" @click.native="authorize()">
+            <font-awesome-icon icon="sign-in-alt"/>
+          </d-button>
+        </div>
       </div>
     </nav>
     <div class="content">
@@ -24,27 +31,32 @@
 import {mapGetters, mapActions} from 'vuex';
 import Message from "@/components/Message";
 import Modal from "@/components/Modal";
+import DButton from "@/components/DButton";
+
 
 export default {
   name: 'app',
-  components: {Modal, Message},
+  components: {DButton, Modal, Message},
   computed: {
     ...mapGetters(['allTasks']),
     theme() {
       return this.$store.getters.theme;
+    },
+    userData() {
+      return this.$store.getters.userData;
     }
   },
   methods: {
-    ...mapActions(['fetchTasks'])
-  },
-  data() {
-    return {}
+    ...mapActions(['fetchTasks']),
+    authorize() {
+      this.$store.dispatch('toggleModal', {header: 'Authorization', type: 'auth'});
+    }
   },
 
   mounted() {
     this.fetchTasks();
     this.$store.dispatch('changeTheme', localStorage.getItem('theme'));
-  }
+  },
 
 }
 </script>
@@ -62,7 +74,7 @@ export default {
 
 #app.dark {
   .logo {
-  background-color:  #6d6d6d ;;
+    background-color: #6d6d6d;;
   }
 }
 

@@ -23,8 +23,9 @@
       </div>
       <h2>Task #{{ task.id }}: <span title="Click to edit" v-bind:class="{'empty': emptyTitle}" @click="editTitle()"
                                      v-if="!titleEditable">{{ task.title }}</span></h2>
-      <label><input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text" v-model="task.title"
-                @blur="saveChanges()"></label>
+      <label><input placeholder="Type in title of task" v-if="titleEditable" ref="titleRef" type="text"
+                    v-model="task.title"
+                    @blur="saveChanges()"></label>
 
       <p class="description" v-bind:class="{'empty': emptyDescription}" title="Click to edit"
          @click="editDescription()"
@@ -38,7 +39,7 @@
       </div>
 
 
-      <div class="mt24 mb12 btn-container">
+      <div class="mt24 mb12 btn-container" v-if="userData">
         <div>
           <d-button v-bind:type="'button'" class="" v-bind:title="'+ Add subtask'"
                     @click.native="createSubtask()"></d-button>
@@ -52,7 +53,8 @@
       <hr>
 
       <p class="help">
-        Click on field to edit its information
+        <span v-if="userData">Click on field to edit its information</span>
+        <span v-else>You should be authorized to edit information</span>
       </p>
     </form>
 
@@ -118,12 +120,13 @@ export default {
 
     },
     createSubtask() {
-      this.$store.commit('setType', 'subtask');
       this.$nextTick(() => {
-        this.$store.dispatch('toggleModal');
+        this.$store.dispatch('toggleModal', {header: 'Create subtask', type: 'subtask'});
       });
     },
     editTitle() {
+      if (!this.userData) return false;
+
       this.titleEditable = true;
       this.$nextTick(() => {
         this.$refs.titleRef.focus();
@@ -131,6 +134,8 @@ export default {
     },
 
     editDescription() {
+      if (!this.userData) return false;
+
       this.descriptionEditable = true;
       this.$nextTick(() => {
         this.$refs.descRef.focus();
@@ -149,6 +154,9 @@ export default {
   },
 
   computed: {
+    userData() {
+      return this.$store.getters.userData;
+    },
     subtasks() {
       if (this.$store.getters.allTasks.length) {
         let i = this.$store.getters.allTasks.indexOf(this.task);
