@@ -33,7 +33,6 @@ import Message from "@/components/Message";
 import Modal from "@/components/Modal";
 import DButton from "@/components/DButton";
 
-
 export default {
   name: 'app',
   components: {DButton, Modal, Message},

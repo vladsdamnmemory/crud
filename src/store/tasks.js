@@ -83,6 +83,12 @@ export default {
         updateTasks(state, tasks) {
             state.tasks = tasks;
         },
+
+        randomizeTasks(state, lilac) {
+            state.tasks = lilac([...state.tasks]).shuffle().return();
+            this.dispatch('updateTaskInLocalStorage');
+        },
+
         removeTask(state, id) {
             state.tasks = state.tasks.filter(task => {
                 return +task.id !== +id;

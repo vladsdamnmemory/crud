@@ -1,10 +1,9 @@
-# crud
+# Vue task manager
 
-### From author
+A web application you can use to remember your activities. This is an amateur project created for entertainment
+purposes.
 
-Yes, I know BEM is presented not everywhere due to will to make more visible functionality rather than inner style clarity
-Styles need refactoring because I wanted to implement as much as I can in a fastest way
-While developing there was no designer involved =)
-That is what I had time to make out this weekends
-Chrome is more preferable for check due to limited development time, Safari spoils the font
-Please note that I have not written for a long time on Vue (2 or more years)
+Project uses [lilac.js](https://github.com/vladsdamnmemory/lilac) which is used as a Vue plugin.
+
+The application code style is pretty loose and doesn't pretend to be perfect.
+`Vue task manager` is currently being gradually developed as a freestyled side project. 

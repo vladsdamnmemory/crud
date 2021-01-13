@@ -6,8 +6,9 @@
 
     <div class="sort" v-if="tasks.length">
       <i>sort by</i>
-      <span @click="sortBy('id')">Number</span>
-      <span @click="sortBy('date')">Date of creation</span>
+      <span @click="sortBy('id')">id</span>
+      <span @click="sortBy('date')">date</span>
+      <span @click="shuffle()">random</span>
     </div>
 
     <div class="home__sections">
@@ -39,6 +40,7 @@
 // @ is an alias to /src
 import Task from "@/components/Task";
 
+
 export default {
   name: 'Dashboard',
   components: {
@@ -65,7 +67,13 @@ export default {
       }
     },
     sortBy(filter) {
-      this.$store.getters.allTasks.sort(this.sortArray(filter))
+      this.$store.getters.allTasks.sort(this.sortArray(filter));
+      this.$store.dispatch('updateTaskInLocalStorage');
+    },
+    shuffle() {
+      console.log('shuffle');
+      this.$store.commit('randomizeTasks', this.$lilac);
+
     }
   },
   computed: {
@@ -130,7 +138,6 @@ export default {
     }
   }
 }
-
 
 
 .sort {

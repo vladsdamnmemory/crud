@@ -3,12 +3,15 @@
     <p class="task-date">Created: {{ creationDate }} at {{ creationTime }}</p>
 
     <h3><span>{{ value }} #{{ id }}:</span> {{ title }}</h3>
-    <p class="description" v-if="description.trim()">{{ description }}</p>
+
+    <p class="description" v-if="description.trim()">{{ getDesc }}</p>
 
   </section>
 </template>
 
 <script>
+// import lilac from 'lilac';
+
 export default {
   name: "Task",
   props: {
@@ -24,7 +27,7 @@ export default {
     date: {
       type: [Number]
     },
-    value:{
+    value: {
       type: [String]
 
     }
@@ -33,13 +36,20 @@ export default {
   data() {
     return {
       editDesc: false,
-      desc: '',
       creationDate: new Date(this.date).toLocaleDateString(),
-      creationTime: new Date(this.date).getHours() + ':' + new Date(this.date).getMinutes()
-
+      creationTime: new Date(this.date).getHours() + ':' + new Date(this.date).getMinutes(),
+      strLimit: 220
     }
   },
-  methods: {}
+  computed: {
+    getDesc() {
+
+      return this.$lilac(this.description)
+          .limitWordsUntil(this.strLimit)
+          .return();
+
+    }
+  }
 
 }
 </script>
